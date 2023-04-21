@@ -5,20 +5,37 @@ import AddTaskForm from './components/AddTaskForm'
 import { v4 as uuid4 } from 'uuid'
 
 function App() {
-  const localStorageTasksName = 'tasks'
   const [showAddTask, setShowAddTask] = useState(false)
 
-  const localStorageTasks = localStorage.getItem(localStorageTasksName)
-    ? JSON.parse(localStorage.getItem(localStorageTasksName))
-    : []
+  const [tasks, setTasks] = useState([])
 
-  const [tasks, setTasks] = useState(localStorageTasks)
-
-  // // componentDidUpdate
+  // componentDidMount
   useEffect(() => {
-    // Your code here
-    localStorage.setItem(localStorageTasksName, JSON.stringify(tasks))
-  }, [tasks])
+    const getTasks = async () => {
+      const tasksFromServer = await fetchTasks()
+      setTasks(tasksFromServer)
+    }
+    getTasks()
+  }, [])
+
+  // fetch tasks
+  const fetchTasks = async () => {
+    const response = await fetch('http://localhost:5000/tasks')
+    const data = await response.json()
+    return data
+  }
+
+  // componentDidUpdate
+  // useEffect(() => {
+  //   // Your code here
+  // }, [yourDependency]);
+
+  // componentWillUnmount
+  // useEffect(() => {
+  //   return () => {
+  //      // Your code here
+  //   }
+  // }, [yourDependency]);
 
   // Add Task
   const addTask = (task) => {
