@@ -34,7 +34,7 @@ function App() {
     if (!initLoad) {
       saveTasks()
     }
-  }, [saveTasks, initLoad])
+  }, [tasks, initLoad])
 
   return (
     <Router>
